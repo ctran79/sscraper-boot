@@ -8,9 +8,10 @@
     <div class="form-inline">
         <div class="px-2">Please choose topic:</div>
         <div class="px-2 form-group ">
-            <select id="select-topic" class="form-control">
-                <option th:each="item : ${topics}" th:selected="${#strings.equals(param.topic, item.id)}" th:text="${item.name}" th:value="${item.id}"></option>
-             </select>
+            <select class="form-control" id="select-topic">
+                <option th:each="item : ${topics}" th:selected="${#strings.equals(param.topic, item.id)}"
+                        th:text="${item.name}" th:value="${item.id}"></option>
+            </select>
         </div>
         <div class="px-2">
             <button class="btn btn-primary" id="show-articles-list-btn">Show</button>
@@ -19,7 +20,15 @@
 
     <ul class="list-group pt-2" th:if="${not #lists.isEmpty(articlesList)}">
         <li class="list-group-item" th:each="item : ${articlesList}">
-            <a th:href="${item.link}" th:text="${item.title}" target="_blank" rel="noopener noreferrer"></a>
+            <i data-th-data-favorite="${not item.favorite}" th:classappend="${item.favorite == true ? 'fa fa-star' : 'fa fa-star-o'}"
+               th:id="${item.id}"
+            ></i>
+
+            <span class="d-inline" th:text="${#dates.format(item.scrapingDate, 'yyyy-MM-dd')}"/>
+            <a rel="noopener noreferrer" target="_blank" th:href="${item.link}">
+                <span th:class="${item.visited == true ? 'font-weight-light' : 'font-weight-bold'}"
+                      th:text="${item.title}"></span>
+            </a>
         </li>
     </ul>
 </div>
@@ -27,12 +36,23 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
     let parserCode = /*[[${parserCode}]]*/ '';
+    let url = /*[[${url}]]*/ '';
+
     $(function () {
         $("#show-articles-list-btn").on("click", function (e) {
             e.preventDefault();
             let topicId = parseInt($("select[id=select-topic]").val());
-            window.location.href = `/parsers/${parserCode}?topic=${topicId}`;
-         });
+            window.location = `/parsers/${parserCode}?topic=${topicId}`;
+        });
+        $("i[id]").on("click", function () {
+            $.ajax({
+                type: "PATCH",
+                url: "/articles/" + this.id + "?favorite=" + (this.dataset.favorite),
+                success: function () {
+                    window.location = url;
+                }
+            });
+        });
     });
     /*]]>*/
 </script>

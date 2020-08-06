@@ -39,4 +39,22 @@ public class ArticleServiceImpl implements ArticleService {
     public Article getArticleByLink(String link) {
         return articleRepository.findArticleByLinkEquals(link);
     }
+
+    @Override
+    public void patchArticle(Integer articleId, Boolean favorite, Boolean visited, Boolean deleted) {
+        Article article = articleRepository.findById(articleId).orElseThrow();
+        boolean changed = (favorite != null || visited != null || deleted != null);
+        if (favorite != null) {
+            article.setFavorite(favorite);
+        }
+        if (visited != null) {
+            article.setVisited(visited);
+        }
+        if (deleted != null) {
+            article.setDeleted(deleted);
+        }
+        if (changed) {
+            articleRepository.save(article);
+        }
+    }
 }

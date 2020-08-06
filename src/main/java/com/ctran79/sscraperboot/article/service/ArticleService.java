@@ -12,4 +12,6 @@ public interface ArticleService {
     void save(Article article);
 
     Article getArticleByLink(String link);
+
+    void patchArticle(Integer articleId, Boolean favorite, Boolean visited, Boolean deleted);
 }

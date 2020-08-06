@@ -18,7 +18,7 @@ public interface ArticleRepository extends JpaRepository<Article, Integer> {
     Integer countByDeletedIsFalseAndVisitedIsFalse();
 
     @Query(nativeQuery = true,
-            value = "SELECT a.* FROM article a JOIN article_topic at ON a.id=at.article_id WHERE at.topic_id=?1 AND deleted=false")
+            value = "SELECT a.* FROM article a JOIN article_topic at ON a.id=at.article_id WHERE at.topic_id=?1 AND a.deleted=false")
     List<Article> getArticlesListInTopic(Integer topicId, Pageable pageable);
 
     Article findArticleByLinkEquals(String link);
