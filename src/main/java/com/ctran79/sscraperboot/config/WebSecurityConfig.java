@@ -1,5 +1,6 @@
 package com.ctran79.sscraperboot.config;
 
+import com.ctran79.sscraperboot.user.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 
@@ -26,6 +29,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private BCryptPasswordEncoder passwordEncoder;
 
+    private UserService userService;
+
     private DataSource dataSource;
 
     @Override
@@ -35,6 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/css/**").permitAll()
                 .mvcMatchers("/js/**").permitAll()
                 .mvcMatchers("/img/**").permitAll()
+                .mvcMatchers("/fonts/**").permitAll()
                 .mvcMatchers("/admin/**").authenticated()
                 .mvcMatchers("/**").authenticated()
                 .and()
@@ -43,7 +49,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
-                .permitAll();
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID");
     }
 
     @Override

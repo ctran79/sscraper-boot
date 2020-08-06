@@ -1,4 +1,4 @@
-package com.ctran79.sscraperboot.user;
+package com.ctran79.sscraperboot.user.model;
 
 public enum RoleType {
     ROLE_ADMIN,

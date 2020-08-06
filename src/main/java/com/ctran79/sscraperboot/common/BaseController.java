@@ -1,5 +1,8 @@
 package com.ctran79.sscraperboot.common;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
 /**
  * @author ctran79
  */

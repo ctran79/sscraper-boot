@@ -1,4 +1,4 @@
-package com.ctran79.sscraperboot.user;
+package com.ctran79.sscraperboot.user.model;
 
 import lombok.Data;
 
@@ -33,8 +33,8 @@ public class User {
     @Column
     private String fullName;
 
-    @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role")
-    private Set<RoleType> roles = new HashSet<>();
+    @Column(name = "role")
+    private Set<String> roles = new HashSet<>();
 }
