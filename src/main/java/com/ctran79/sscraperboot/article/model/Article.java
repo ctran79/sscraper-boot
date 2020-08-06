@@ -1,11 +1,12 @@
 package com.ctran79.sscraperboot.article.model;
 
+import com.ctran79.sscraperboot.topic.model.Topic;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author ctran79
@@ -16,6 +17,7 @@ import java.util.Date;
 public class Article {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column
@@ -28,17 +30,25 @@ public class Article {
     private String note;
 
     @Column
-    private Date scrapingDate;
+    private Date scrapingDate = new Date();
 
     @Column
-    private boolean favorite;
+    private boolean favorite = false;
 
     @Column
     private String attachment;
 
     @Column
-    private boolean visited;
+    private boolean visited = false;
 
     @Column
-    private boolean deleted;
+    private boolean deleted = false;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "article_topic",
+            joinColumns = @JoinColumn(name = "article_id"),
+            inverseJoinColumns = @JoinColumn(name = "topic_id")
+    )
+    private Set<Topic> topics = new HashSet<>();
 }

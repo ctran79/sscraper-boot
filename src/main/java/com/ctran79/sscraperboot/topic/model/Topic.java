@@ -1,9 +1,11 @@
 package com.ctran79.sscraperboot.topic.model;
 
+import com.ctran79.sscraperboot.article.model.Article;
 import com.ctran79.sscraperboot.user.model.RoleType;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -15,6 +17,7 @@ import java.util.Set;
 public class Topic {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column
@@ -25,9 +28,4 @@ public class Topic {
 
     @Column
     private String parser;
-
-    @ElementCollection
-    @Column(name = "role")
-    @CollectionTable(name = "topic_role")
-    private Set<RoleType> roles;
 }

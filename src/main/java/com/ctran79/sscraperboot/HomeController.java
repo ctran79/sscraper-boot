@@ -30,7 +30,6 @@ public class HomeController extends BaseController {
 
     @GetMapping(path = "/")
     String index(Model model, Authentication auth) {
-//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getLoggedUser(auth.getName());
         model.addAttribute("user", user);
         model.addAttribute("nUnreadArticles", articleService.countUnreadArticles());
