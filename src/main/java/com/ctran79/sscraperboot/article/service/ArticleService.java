@@ -1,13 +1,14 @@
 package com.ctran79.sscraperboot.article.service;
 
 import com.ctran79.sscraperboot.article.model.Article;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface ArticleService {
     Integer countUnreadArticles();
 
-    List<Article> getArticlesListInTopic(Integer topicId, Integer pageNum);
+    Page<Article> getArticlesListInTopic(Integer topicId, Integer pageNum);
 
     void save(Article article);
 

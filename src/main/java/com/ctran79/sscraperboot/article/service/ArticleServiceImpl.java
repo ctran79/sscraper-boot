@@ -2,6 +2,7 @@ package com.ctran79.sscraperboot.article.service;
 
 import com.ctran79.sscraperboot.article.model.Article;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,8 +26,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<Article> getArticlesListInTopic(Integer topicId, Integer pageNum) {
-        Pageable pageable = PageRequest.of(pageNum - 1, 20, Sort.by(Sort.Order.desc("id")));
+    public Page<Article> getArticlesListInTopic(Integer topicId, Integer pageNum) {
+        Pageable pageable = PageRequest.of(pageNum - 1, 30, Sort.by(Sort.Order.desc("id")));
         return articleRepository.getArticlesListInTopic(topicId, pageable);
     }
 
@@ -42,7 +43,10 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void patchArticle(Integer articleId, Boolean favorite, Boolean visited, Boolean deleted) {
-        Article article = articleRepository.findById(articleId).orElseThrow();
+        Article article = articleRepository.getOne(articleId);
+        if (article == null) {
+            return;
+        }
         boolean changed = (favorite != null || visited != null || deleted != null);
         if (favorite != null) {
             article.setFavorite(favorite);

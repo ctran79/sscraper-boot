@@ -17,20 +17,30 @@
             <button class="btn btn-primary" id="show-articles-list-btn">Show</button>
         </div>
     </div>
-
-    <ul class="list-group pt-2" th:if="${not #lists.isEmpty(articlesList)}">
-        <li class="article-item list-group-item" th:each="item : ${articlesList}">
+    <ul class="pagination">
+        <li th:class="page-item" th:if="${page.totalPages} >= 1" th:classappend="${#strings.equals(param.page, 1)} ? 'active' : ''">
+            <a class="page-link" th:href="@{/parsers/{parserCode}(parserCode=${parserCode}, topic=${param.topic}, page=1)}">1</a>
+        </li>
+        <li class="page-item" th:if="${page.totalPages} >= 2" th:classappend="${#strings.equals(param.page, 2)} ? 'active' : ''">
+            <a class="page-link" th:href="@{/parsers/{parserCode}(parserCode=${parserCode}, topic=${param.topic}, page=2)}">2</a>
+        </li>
+        <li class="page-item" th:if="${page.totalPages} >= 3" th:classappend="${#strings.equals(param.page, 3)} ? 'active' : ''">
+            <a class="page-link" th:href="@{/parsers/{parserCode}(parserCode=${parserCode}, topic=${param.topic}, page=3)}">3</a>
+        </li>
+    </ul>
+    <ul class="list-group pt-2" th:if="${not #lists.isEmpty(page.content)}">
+        <li class="article-item list-group-item" th:each="item : ${page.content}">
             <i data-th-data-favorite="${not item.favorite}"
                th:classappend="${item.favorite == true ? 'fa fa-star' : 'fa fa-star-o'}"
                th:id="${item.id}"
             ></i>
 
             <span class="d-inline" th:text="${#dates.format(item.scrapingDate, 'yyyy-MM-dd')}"/>
-            <a th:id="${item.id}" rel="noopener noreferrer" target="_blank" th:href="${item.link}">
+            <a rel="noopener noreferrer" target="_blank" th:href="${item.link}" th:id="${item.id}">
                 <span th:class="${item.visited == true ? 'font-weight-light' : 'font-weight-bold'}"
                       th:text="${item.title}"></span>
             </a>
-            <button th:id="${item.id}" class="btn btn-danger ml-2">Delete</button>
+            <button class="btn btn-danger ml-2" th:id="${item.id}">Delete</button>
         </li>
     </ul>
 </div>
@@ -44,7 +54,7 @@
         $("#show-articles-list-btn").on("click", function (e) {
             e.preventDefault();
             let topicId = parseInt($("select[id=select-topic]").val());
-            window.location = `/parsers/${parserCode}?topic=${topicId}`;
+            window.location = `/parsers/${parserCode}?topic=${topicId}&page=1`;
         });
         $(".article-item i[id]").on("click", function () {
             $.ajax({

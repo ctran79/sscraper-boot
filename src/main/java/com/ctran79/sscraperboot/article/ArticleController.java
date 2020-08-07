@@ -6,6 +6,7 @@ import com.ctran79.sscraperboot.common.BaseController;
 import com.ctran79.sscraperboot.topic.model.Topic;
 import com.ctran79.sscraperboot.topic.service.TopicService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -48,7 +49,7 @@ public class ArticleController extends BaseController {
     @GetMapping("parsers/{parserCode}")
     String articlesList(@PathVariable String parserCode,
                         @RequestParam(required = false, name = "topic") Integer topicId,
-                        @RequestParam(required = false, defaultValue = "1") Integer pageNum,
+                        @RequestParam(required = false, defaultValue = "1", name = "page") Integer pageNum,
                         Model model, Authentication auth) {
         parserCode = parserCode.toUpperCase();
         Set<String> roles = auth.getAuthorities().stream()
@@ -57,8 +58,8 @@ public class ArticleController extends BaseController {
         List<Topic> topics = topicService.getTopicsByParser(parserCode, roles);
         boolean hasAccess2Topic = topics.stream().anyMatch(topic -> topic.getId() == topicId);
         if (topicId != null && hasAccess2Topic) {
-            List<Article> articlesList = articleService.getArticlesListInTopic(topicId, pageNum);
-            model.addAttribute("articlesList", articlesList);
+            Page<Article> page = articleService.getArticlesListInTopic(topicId, pageNum);
+            model.addAttribute("page", page);
         }
 
         model.addAttribute("parserCode", parserCode.toLowerCase());
