@@ -3,6 +3,7 @@ package com.ctran79.sscraperboot.topic.model;
 import com.ctran79.sscraperboot.article.model.Article;
 import com.ctran79.sscraperboot.user.model.RoleType;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.HashSet;

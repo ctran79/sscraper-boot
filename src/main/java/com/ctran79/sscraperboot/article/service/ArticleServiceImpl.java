@@ -32,8 +32,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void save(Article article) {
-        articleRepository.save(article);
+    public void saveAndFlush(Article article) {
+        articleRepository.saveAndFlush(article);
     }
 
     @Override

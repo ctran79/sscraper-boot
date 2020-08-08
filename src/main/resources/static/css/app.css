@@ -1,15 +1,28 @@
 body {
     background-color: #fefefe;
 }
-
+/*menu*/
+.navbar-toggle .icon-bars-button{
+    display: inline-block;
+    vertical-align:middle;
+}
+.navbar-toggle .icon-bar {
+    margin-bottom:2px;
+    display: block;
+    width: 22px;
+    height: 2px;
+    background-color: #cccccc;
+    border-radius: 1px;
+}
+/*article buttons*/
 i[id].article-item, img[id].article-item {
-
+    cursor: pointer;
 }
 
 i[id].article-item {
     margin-right: 16px;
 }
-
+/*articles table pagination*/
 .dataTables_wrapper .dataTables_paginate .paginate_button {
     padding: 0 !important;
     border: 0;

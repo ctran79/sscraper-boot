@@ -30,7 +30,9 @@
         $("#show-articles-list-btn").on("click", function (e) {
             e.preventDefault();
             let topicId = parseInt($("select[id=select-topic]").val());
-            window.location = BASE_APP_URL + `/parsers/${parserCode}?topic=${topicId}`;
+            if (topicId) {
+                window.location = BASE_APP_URL + `/parsers/${parserCode}?topic=${topicId}`;
+            }
         });
 
         let articleTable = $("#articles-table").DataTable({
@@ -41,15 +43,22 @@
             pageLength: 20,
             lengthChange: false,
             ajax: BASE_APP_URL + `/api/parsers/${parserCode}?topic=` + [[${param.topic}]] + '&page=1',
-            columnDefs: [{
-                targets: 0,
-                render: function (data, type, row) {
-                    return `<i id="${row.id}" data-favorite="${!row.favorite}" class="article-item ${row.favorite == true ? 'fa fa-star' : 'fa fa-star-o'}"></i>` +
-                        `<img class="article-item" id="${row.id}" alt="delete" class="float-right" height="14px" src="${BASE_APP_URL + '/img/delete.ico'}"/></div>`;
-                }
-            },
+            columnDefs: [
+                {
+                    targets: 0,
+                    render: function (data, type, row) {
+                        return `<i id="${row.id}" data-favorite="${!row.favorite}" class="article-item ${row.favorite == true ? 'fa fa-star' : 'fa fa-star-o'}"></i>` +
+                            `<img class="article-item" id="${row.id}" alt="delete" class="float-right" style="margin-top: -5px" src="${BASE_APP_URL + '/img/delete.ico'}"/></div>`;
+                    }
+                },
                 {
                     targets: 1,
+                    render: function (data, type, row) {
+                        return moment(row.scrapingDate).format("YYYY-MM-DD");
+                    }
+                },
+                {
+                    targets: 2,
                     render: function (data, type, row) {
                         return `<a class="article-item" rel="noopener noreferrer" target="_blank" href="${row.link}" id="${row.id}"><span class="${row.visited == true ? 'font-weight-light' : 'font-weight-bold'}">${row.title}</span></a>`;
                     }

@@ -10,7 +10,7 @@ public interface ArticleService {
 
     Page<Article> getArticlesListInTopic(Integer topicId, Integer pageNum, Integer pageSize);
 
-    void save(Article article);
+    void saveAndFlush(Article article);
 
     Article getArticleByLink(String link);
 

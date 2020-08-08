@@ -2,6 +2,7 @@ package com.ctran79.sscraperboot.article.model;
 
 import com.ctran79.sscraperboot.topic.model.Topic;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;

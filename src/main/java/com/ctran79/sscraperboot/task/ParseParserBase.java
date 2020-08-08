@@ -5,11 +5,9 @@ import com.ctran79.sscraperboot.article.service.ArticleService;
 import com.ctran79.sscraperboot.topic.model.Topic;
 import com.ctran79.sscraperboot.topic.service.TopicService;
 import com.ctran79.sscraperboot.user.model.RoleType;
-import com.ctran79.sscraperboot.user.service.UserService;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.StringUtils;
@@ -58,10 +56,10 @@ public abstract class ParseParserBase implements ParserService {
                             return !inList;
                         })
                         .map(article -> {
-                            String title = tryParseTitle(article.getLink());
-                            if (!StringUtils.isEmpty(title)) {
-                                article.setTitle(title);
-                            }
+//                            String title = tryParseTitle(article.getLink());
+//                            if (!StringUtils.isEmpty(title)) {
+//                                article.setTitle(title);
+//                            }
                             return article;
                         })
                         .collect(Collectors.toList());
@@ -69,11 +67,11 @@ public abstract class ParseParserBase implements ParserService {
                 for (Article article : articles) {
                     Article existingArticle = articleService.getArticleByLink(article.getLink());
                     if (existingArticle == null) {
-                        articleService.save(article);
+                        articleService.saveAndFlush(article);
                     }
                 }
                 log.info("Done: " + topic.getLink());
-                pause(6000);
+//                pause(6000);
             }
         } else {
             log.info("Parser task is turned off");
