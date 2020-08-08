@@ -48,19 +48,12 @@ public class ArticleController extends BaseController {
 
     @GetMapping("parsers/{parserCode}")
     String articlesList(@PathVariable String parserCode,
-                        @RequestParam(required = false, name = "topic") Integer topicId,
-                        @RequestParam(required = false, defaultValue = "1", name = "page") Integer pageNum,
-                        Model model, Authentication auth) {
+                         Model model, Authentication auth) {
         parserCode = parserCode.toUpperCase();
         Set<String> roles = auth.getAuthorities().stream()
                 .map(grantedAuthority -> grantedAuthority.getAuthority())
                 .collect(Collectors.toSet());
         List<Topic> topics = topicService.getTopicsByParser(parserCode, roles);
-        boolean hasAccess2Topic = topics.stream().anyMatch(topic -> topic.getId() == topicId);
-        if (topicId != null && hasAccess2Topic) {
-            Page<Article> page = articleService.getArticlesListInTopic(topicId, pageNum);
-            model.addAttribute("page", page);
-        }
 
         model.addAttribute("parserCode", parserCode.toLowerCase());
         model.addAttribute("topics", topics);

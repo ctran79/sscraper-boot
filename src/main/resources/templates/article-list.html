@@ -17,32 +17,8 @@
             <button class="btn btn-primary" id="show-articles-list-btn">Show</button>
         </div>
     </div>
-    <ul class="pagination">
-        <li th:class="page-item" th:if="${page.totalPages} >= 1" th:classappend="${#strings.equals(param.page, 1)} ? 'active' : ''">
-            <a class="page-link" th:href="@{/parsers/{parserCode}(parserCode=${parserCode}, topic=${param.topic}, page=1)}">1</a>
-        </li>
-        <li class="page-item" th:if="${page.totalPages} >= 2" th:classappend="${#strings.equals(param.page, 2)} ? 'active' : ''">
-            <a class="page-link" th:href="@{/parsers/{parserCode}(parserCode=${parserCode}, topic=${param.topic}, page=2)}">2</a>
-        </li>
-        <li class="page-item" th:if="${page.totalPages} >= 3" th:classappend="${#strings.equals(param.page, 3)} ? 'active' : ''">
-            <a class="page-link" th:href="@{/parsers/{parserCode}(parserCode=${parserCode}, topic=${param.topic}, page=3)}">3</a>
-        </li>
-    </ul>
-    <ul class="list-group pt-2" th:if="${not #lists.isEmpty(page.content)}">
-        <li class="article-item list-group-item" th:each="item : ${page.content}">
-            <i data-th-data-favorite="${not item.favorite}"
-               th:classappend="${item.favorite == true ? 'fa fa-star' : 'fa fa-star-o'}"
-               th:id="${item.id}"
-            ></i>
-
-            <span class="d-inline" th:text="${#dates.format(item.scrapingDate, 'yyyy-MM-dd')}"/>
-            <a rel="noopener noreferrer" target="_blank" th:href="${item.link}" th:id="${item.id}">
-                <span th:class="${item.visited == true ? 'font-weight-light' : 'font-weight-bold'}"
-                      th:text="${item.title}"></span>
-            </a>
-            <button class="btn btn-danger ml-2" th:id="${item.id}">Delete</button>
-        </li>
-    </ul>
+    <table class="table table-striped" id="articles-table" th:if="${not #strings.isEmpty(param.topic)}">
+    </table>
 </div>
 <div th:replace="fragments/footer::footer-scripts"></div>
 <script th:inline="javascript">
@@ -54,32 +30,56 @@
         $("#show-articles-list-btn").on("click", function (e) {
             e.preventDefault();
             let topicId = parseInt($("select[id=select-topic]").val());
-            window.location = `/parsers/${parserCode}?topic=${topicId}&page=1`;
+            window.location = BASE_APP_URL + `/parsers/${parserCode}?topic=${topicId}`;
         });
-        $(".article-item i[id]").on("click", function () {
+
+        let articleTable = $("#articles-table").DataTable({
+            processing: true,
+            serverSide: true,
+            ordering: false,
+            searching: false,
+            pageLength: 20,
+            lengthChange: false,
+            ajax: BASE_APP_URL + `/api/parsers/${parserCode}?topic=` + [[${param.topic}]] + '&page=1',
+            columnDefs: [{
+                targets: 0,
+                render: function (data, type, row) {
+                    return `<i id="${row.id}" data-favorite="${!row.favorite}" class="article-item ${row.favorite == true ? 'fa fa-star' : 'fa fa-star-o'}"></i>` +
+                        `<img class="article-item" id="${row.id}" alt="delete" class="float-right" height="14px" src="${BASE_APP_URL + '/img/delete.ico'}"/></div>`;
+                }
+            },
+                {
+                    targets: 1,
+                    render: function (data, type, row) {
+                        return `<a class="article-item" rel="noopener noreferrer" target="_blank" href="${row.link}" id="${row.id}"><span class="${row.visited == true ? 'font-weight-light' : 'font-weight-bold'}">${row.title}</span></a>`;
+                    }
+                }
+            ]
+        });
+        articleTable.on("click", "i[id].article-item", function () {
             $.ajax({
                 type: "PATCH",
-                url: "/articles/" + this.id + "?favorite=" + (this.dataset.favorite),
+                url: BASE_APP_URL + "/api/articles/" + this.id + "?favorite=" + (this.dataset.favorite),
                 success: function () {
-                    window.location = url;
+                    articleTable.ajax.reload();
                 }
             });
         });
-        $(".article-item button[id]").on("click", function () {
+        articleTable.on("click", "img[id].article-item", function () {
             $.ajax({
                 type: "PATCH",
-                url: "/articles/" + this.id + "?deleted=true",
+                url: BASE_APP_URL + "/api/articles/" + this.id + "?deleted=true",
                 success: function () {
-                    window.location = url;
+                    articleTable.ajax.reload();
                 }
             });
         });
-        $(".article-item a[id]").on("click", function () {
+        articleTable.on("click", "a[id].article-item", function () {
             $.ajax({
                 type: "PATCH",
-                url: "/articles/" + this.id + "?visited=true",
+                url: BASE_APP_URL + "/api/articles/" + this.id + "?visited=true",
                 success: function () {
-                    window.location = url;
+                    articleTable.ajax.reload();
                 }
             });
         });

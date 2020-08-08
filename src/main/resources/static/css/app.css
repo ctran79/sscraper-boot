@@ -2,6 +2,15 @@ body {
     background-color: #fefefe;
 }
 
-i[id] {
-    cursor: pointer;
+i[id].article-item, img[id].article-item {
+
+}
+
+i[id].article-item {
+    margin-right: 16px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0 !important;
+    border: 0;
 }

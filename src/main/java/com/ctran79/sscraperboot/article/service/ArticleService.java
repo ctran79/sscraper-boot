@@ -8,7 +8,7 @@ import java.util.List;
 public interface ArticleService {
     Integer countUnreadArticles();
 
-    Page<Article> getArticlesListInTopic(Integer topicId, Integer pageNum);
+    Page<Article> getArticlesListInTopic(Integer topicId, Integer pageNum, Integer pageSize);
 
     void save(Article article);
 

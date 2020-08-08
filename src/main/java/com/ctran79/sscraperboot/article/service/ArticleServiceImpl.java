@@ -26,8 +26,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Page<Article> getArticlesListInTopic(Integer topicId, Integer pageNum) {
-        Pageable pageable = PageRequest.of(pageNum - 1, 30, Sort.by(Sort.Order.desc("id")));
+    public Page<Article> getArticlesListInTopic(Integer topicId, Integer pageNum, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by(Sort.Order.desc("id")));
         return articleRepository.getArticlesListInTopic(topicId, pageable);
     }
 
