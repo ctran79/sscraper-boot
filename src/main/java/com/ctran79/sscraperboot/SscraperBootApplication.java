@@ -11,5 +11,4 @@ public class SscraperBootApplication {
     public static void main(String[] args) {
         SpringApplication.run(SscraperBootApplication.class, args);
     }
-
 }

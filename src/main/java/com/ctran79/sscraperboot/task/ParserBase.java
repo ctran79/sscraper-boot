@@ -10,7 +10,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 @AllArgsConstructor
-public abstract class ParseParserBase implements ParserService {
+public abstract class ParserBase implements ParserService {
 
     private static final WebClient webClient = new WebClient();
 
@@ -42,7 +41,7 @@ public abstract class ParseParserBase implements ParserService {
             Set<String> allRoles = Stream.of(RoleType.values())
                     .map(roleType -> roleType.name())
                     .collect(Collectors.toSet());
-            List<Topic> topics = topicService.getTopicsByParser(getSourceName(), allRoles);
+            List<Topic> topics = topicService.getTopicsByParserAndRoles(getSourceName().name(), allRoles);
             for (Topic topic : topics) {
                 log.info("Parsing link: " + topic.getLink());
                 List<Article> articles = parseSearchResults(topic);

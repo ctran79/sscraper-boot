@@ -1,4 +1,4 @@
-package com.ctran79.sscraperboot;
+package com.ctran79.sscraperboot.dto.response;
 
 import com.ctran79.sscraperboot.article.model.Article;
 import lombok.Data;

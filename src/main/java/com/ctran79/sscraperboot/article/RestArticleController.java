@@ -1,7 +1,7 @@
 package com.ctran79.sscraperboot.article;
 
 import com.ctran79.sscraperboot.ApiController;
-import com.ctran79.sscraperboot.DataTableResult;
+import com.ctran79.sscraperboot.dto.response.DataTableResult;
 import com.ctran79.sscraperboot.article.model.Article;
 import com.ctran79.sscraperboot.article.service.ArticleService;
 import com.ctran79.sscraperboot.topic.model.Topic;
@@ -49,7 +49,7 @@ public class RestArticleController {
         Set<String> roles = auth.getAuthorities().stream()
                 .map(grantedAuthority -> grantedAuthority.getAuthority())
                 .collect(Collectors.toSet());
-        List<Topic> topics = topicService.getTopicsByParser(parserCode, roles);
+        List<Topic> topics = topicService.getTopicsByParserAndRoles(parserCode, roles);
         boolean hasAccess2Topic = topics.stream().anyMatch(topic -> topic.getId() == topicId);
         if (topicId != null && hasAccess2Topic) {
             Page<Article> page = articleService.getArticlesListInTopic(topicId, start/length, length);

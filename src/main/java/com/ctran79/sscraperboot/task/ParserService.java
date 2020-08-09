@@ -6,5 +6,5 @@ public interface ParserService {
 
     void scrape();
 
-    String getSourceName();
+    Parser getSourceName();
 }

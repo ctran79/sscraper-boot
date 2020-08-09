@@ -5,10 +5,7 @@ import com.ctran79.sscraperboot.article.model.Article;
 import com.ctran79.sscraperboot.article.service.ArticleService;
 import com.ctran79.sscraperboot.topic.model.Topic;
 import com.ctran79.sscraperboot.topic.service.TopicService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,7 +21,7 @@ import java.util.List;
 
 @Component
 @Slf4j
-public final class GoogleParser extends ParseParserBase {
+public final class GoogleParser extends ParserBase {
 
     @Value("${sscraper}")
     @Getter
@@ -36,9 +33,9 @@ public final class GoogleParser extends ParseParserBase {
     }
 
     @Override
-    public String getSourceName() {
+    public Parser getSourceName() {
         //ex.: https://www.google.pl/search?q=Keyword&lr=lang_pl&tbs=lr:lang_1pl,qdr:d&start=0&num=50
-        return "GOOGLE";
+        return Parser.GOOGLE;
     }
 
     @Override

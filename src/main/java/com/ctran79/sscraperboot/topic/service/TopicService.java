@@ -11,5 +11,9 @@ import java.util.Set;
 
 public interface TopicService {
 
-    List<Topic> getTopicsByParser(String parserCode, Set<String> roles);
+    List<Topic> getTopicsByParserAndRoles(String parserCode, Set<String> roles);
+
+    List<Topic> getTopicsByRoles(Set<String> roles);
+
+    void batchUpdateTopicsList(List<Topic> topicsList, Integer[] deletedTopicIds);
 }

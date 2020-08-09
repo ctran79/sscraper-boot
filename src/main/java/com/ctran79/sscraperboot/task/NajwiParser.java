@@ -20,7 +20,7 @@ import java.util.List;
 
 @Component
 @Slf4j
-public final class NajwiParser extends ParseParserBase {
+public final class NajwiParser extends ParserBase {
 
     @Value("${sscraper}")
     @Getter
@@ -32,9 +32,9 @@ public final class NajwiParser extends ParseParserBase {
     }
 
     @Override
-    public String getSourceName() {
+    public Parser getSourceName() {
         //ex.: https://www.najwi.pl/Keyword1-Keyword2?newsList-vp-page=2
-        return "NAJWI";
+        return Parser.NAJWI;
     }
 
     @Override
