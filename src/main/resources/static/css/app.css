@@ -2,11 +2,11 @@ body {
     background-color: #fefefe;
 }
 /*menu*/
-.navbar-toggle .icon-bars-button{
+.icon-bars-button{
     display: inline-block;
     vertical-align:middle;
 }
-.navbar-toggle .icon-bar {
+.icon-bar {
     margin-bottom:2px;
     display: block;
     width: 22px;
@@ -26,4 +26,13 @@ i[id].article-item {
 .dataTables_wrapper .dataTables_paginate .paginate_button {
     padding: 0 !important;
     border: 0;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    z-index: 0;
+    border: 0 !important;
+}
+
+.page-item:first-child .page-link, .page-item:last-child .page-link {
+    border-radius: 0;
 }

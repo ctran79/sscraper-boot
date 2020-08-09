@@ -47,14 +47,20 @@
                 {
                     targets: 0,
                     render: function (data, type, row) {
-                        return `<i id="${row.id}" data-favorite="${!row.favorite}" class="article-item ${row.favorite == true ? 'fa fa-star' : 'fa fa-star-o'}"></i>` +
-                            `<img class="article-item" id="${row.id}" alt="delete" class="float-right" style="margin-top: -5px" src="${BASE_APP_URL + '/img/delete.ico'}"/></div>`;
+                        let retVal = `<div style="min-width: 60px">`;
+                        retVal += `<i id="${row.id}" data-favorite="${!row.favorite}" class="article-item ${row.favorite == true ? 'fa fa-star' : 'fa fa-star-o'}"></i>`;
+                        retVal += `<img class="article-item" id="${row.id}" alt="delete" class="float-right" style="margin-top: -5px" src="${BASE_APP_URL + '/img/delete.ico'}"/></div>`;
+                        retVal += `</div>`;
+                        return retVal;
                     }
                 },
                 {
                     targets: 1,
                     render: function (data, type, row) {
-                        return moment(row.scrapingDate).format("YYYY-MM-DD");
+                        let retVal = `<div style="min-width: 120px">`;
+                        retVal += moment(row.scrapingDate).format("YYYY-MM-DD");
+                        retVal += `</div>`;
+                        return retVal;
                     }
                 },
                 {
