@@ -1,6 +1,7 @@
 package com.ctran79.sscraperboot.topic.model;
 
 import com.ctran79.sscraperboot.article.model.Article;
+import com.ctran79.sscraperboot.base.IdEntity;
 import com.ctran79.sscraperboot.user.model.RoleType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -16,11 +17,7 @@ import java.util.Set;
 
 @Entity
 @Data
-public class Topic {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Topic extends IdEntity {
 
     @Column
     private String name;

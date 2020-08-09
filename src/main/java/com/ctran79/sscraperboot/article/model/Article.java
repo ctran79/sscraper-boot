@@ -1,5 +1,6 @@
 package com.ctran79.sscraperboot.article.model;
 
+import com.ctran79.sscraperboot.base.IdEntity;
 import com.ctran79.sscraperboot.topic.model.Topic;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -15,11 +16,7 @@ import java.util.Set;
 
 @Entity
 @Data
-public class Article {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Article extends IdEntity {
 
     @Column
     private String link;

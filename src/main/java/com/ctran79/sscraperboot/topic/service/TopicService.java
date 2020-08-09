@@ -1,5 +1,6 @@
 package com.ctran79.sscraperboot.topic.service;
 
+import com.ctran79.sscraperboot.base.BusinessException;
 import com.ctran79.sscraperboot.topic.model.Topic;
 
 import java.util.List;
@@ -15,5 +16,5 @@ public interface TopicService {
 
     List<Topic> getTopicsByRoles(Set<String> roles);
 
-    void batchUpdateTopicsList(List<Topic> topicsList, Integer[] deletedTopicIds);
+    void batchUpdateTopicsList(List<Topic> topicsList, Integer[] deletedTopicIds) throws BusinessException;
 }

@@ -1,6 +1,6 @@
 package com.ctran79.sscraperboot.user;
 
-import com.ctran79.sscraperboot.common.BaseController;
+import com.ctran79.sscraperboot.base.BaseController;
 import com.ctran79.sscraperboot.task.Parser;
 import com.ctran79.sscraperboot.topic.model.Topic;
 import com.ctran79.sscraperboot.topic.service.TopicService;
@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Arrays;
 import java.util.List;

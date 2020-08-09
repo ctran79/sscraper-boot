@@ -1,5 +1,6 @@
 package com.ctran79.sscraperboot.user.model;
 
+import com.ctran79.sscraperboot.base.IdEntity;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,11 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "app_user")
 @Data
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class User extends IdEntity {
 
     @Column
     private String username;

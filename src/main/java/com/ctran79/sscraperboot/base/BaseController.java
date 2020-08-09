@@ -1,4 +1,4 @@
-package com.ctran79.sscraperboot.common;
+package com.ctran79.sscraperboot.base;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

@@ -1,18 +1,14 @@
 package com.ctran79.sscraperboot;
 
-import com.ctran79.sscraperboot.article.model.Article;
 import com.ctran79.sscraperboot.article.service.ArticleService;
-import com.ctran79.sscraperboot.common.BaseController;
+import com.ctran79.sscraperboot.base.BaseController;
 import com.ctran79.sscraperboot.user.model.User;
 import com.ctran79.sscraperboot.user.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.security.Principal;
 
 /**
  * @author ctran79

@@ -6,6 +6,18 @@
       xmlns:th="http://www.thymeleaf.org">
 <body>
 <div class="container" layout:fragment="content">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${not #strings.isEmpty(error)}">
+        <span th:text="${error}"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${not #strings.isEmpty(success)}">
+        <span th:text="${success}"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     <form id="topics-list-form" sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{/topics}" th:method="post">
         <h1>Links list</h1>
         <table id="topics-table"></table>
@@ -86,8 +98,9 @@
         if (topicsList[i].id) {
             deletedTopicIds.push(topicsList[i].id);
         }
-        delete topicsList[i];
-        topicsTable.row(i).remove().draw();
+        topicsList.splice(i, 1);
+        topicsTable.clear();
+        topicsTable.rows.add(topicsList).draw();
     });
 
     $("#add-new-parser-btn").on("click", function (e) {

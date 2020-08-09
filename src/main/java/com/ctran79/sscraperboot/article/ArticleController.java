@@ -1,7 +1,7 @@
 package com.ctran79.sscraperboot.article;
 
 import com.ctran79.sscraperboot.article.service.ArticleService;
-import com.ctran79.sscraperboot.common.BaseController;
+import com.ctran79.sscraperboot.base.BaseController;
 import com.ctran79.sscraperboot.topic.model.Topic;
 import com.ctran79.sscraperboot.topic.service.TopicService;
 import lombok.AllArgsConstructor;

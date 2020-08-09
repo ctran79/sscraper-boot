@@ -1,4 +1,4 @@
-package com.ctran79.sscraperboot;
+package com.ctran79.sscraperboot.config;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
