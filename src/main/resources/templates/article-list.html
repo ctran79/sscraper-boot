@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+<html lang="en" layout:decorate="~{layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: header"></head>
 <body>
-<div th:replace="fragments/menu::top-menu"></div>
-<div class="container pt-2">
+<div class="container pt-2" layout:fragment="content">
     <div class="form-inline">
         <div class="px-2">Please choose topic:</div>
         <div class="px-2 form-group ">
@@ -20,8 +20,7 @@
     <table class="table table-striped" id="articles-table" th:if="${not #strings.isEmpty(param.topic)}">
     </table>
 </div>
-<div th:replace="fragments/footer::footer-scripts"></div>
-<script th:inline="javascript">
+<script layout:fragment="page-scripts" th:inline="javascript">
     /*<![CDATA[*/
     let parserCode = /*[[${parserCode}]]*/ '';
     let url = /*[[${url}]]*/ '';

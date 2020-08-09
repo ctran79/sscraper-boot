@@ -30,7 +30,7 @@ public class RestArticleController {
 
     private TopicService topicService;
 
-    @PatchMapping("articles/{articleId}")
+    @PatchMapping("/articles/{articleId}")
     ResponseEntity<Void> patchArticle(@PathVariable Integer articleId,
                                       @RequestParam(required = false) Boolean favorite,
                                       @RequestParam(required = false) Boolean visited,
@@ -39,7 +39,7 @@ public class RestArticleController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("parsers/{parserCode}")
+    @GetMapping("/parsers/{parserCode}")
     ResponseEntity<DataTableResult> articlesList(@PathVariable String parserCode,
                                                @RequestParam(name = "topic") Integer topicId,
                                                @RequestParam Integer start,

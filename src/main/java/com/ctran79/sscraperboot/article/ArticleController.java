@@ -46,7 +46,7 @@ public class ArticleController extends BaseController {
         model.addAttribute("url", url);
     }
 
-    @GetMapping("parsers/{parserCode}")
+    @GetMapping("/parsers/{parserCode}")
     String articlesList(@PathVariable String parserCode,
                          Model model, Authentication auth) {
         parserCode = parserCode.toUpperCase();

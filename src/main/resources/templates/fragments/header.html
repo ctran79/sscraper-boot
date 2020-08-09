@@ -2,27 +2,29 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 
-<head th:fragment="header">
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+<head>
+    <th:block th:fragment="header">
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
 
-    <link th:href="@{/favicon.ico}" rel="shortcut icon" type="image/x-icon">
+        <link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon">
 
 
-    <!-- Bootstrap CSS -->
-    <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
 
-    <!-- Font-awesome CSS -->
-    <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet">
+        <!-- Font-awesome CSS -->
+        <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
 
-    <!-- Datatables CSS -->
-    <link th:href="@{/css/datatables.min.css}" rel="stylesheet">
-    <link th:href="@{/css/dataTables.bootstrap4.min.css}" rel="stylesheet"/>
-    <link th:href="@{/css/jquery.dataTables.min.css}" rel="stylesheet"/>
+        <!-- Datatables CSS -->
+        <link rel="stylesheet" th:href="@{/css/datatables.min.css}">
+        <link rel="stylesheet" th:href="@{/css/dataTables.bootstrap4.min.css}"/>
+        <link rel="stylesheet" th:href="@{/css/jquery.dataTables.min.css}"/>
 
-    <link th:href="@{/css/app.css}" rel="stylesheet">
+        <link rel="stylesheet" th:href="@{/css/app.css}">
 
-    <title>Search scraper</title>
+        <title>Search scraper</title>
+    </th:block>
 </head>
 </html>
