@@ -28,6 +28,9 @@ public class Topic extends IdEntity {
     @Column
     private String parser;
 
+    @Column
+    private boolean enabled = false;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "topic_role")
     @Column(name = "role")

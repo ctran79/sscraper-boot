@@ -1,0 +1,1 @@
+ALTER TABLE topic ADD COLUMN enabled BOOLEAN DEFAULT true

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Set;
+
 /**
  * @author ctran79
  */
@@ -26,9 +28,10 @@ public class HomeController extends BaseController {
 
     @GetMapping(path = "/")
     String index(Model model, Authentication auth) {
+        Set<String> roles = getLoggedInUserRoles(auth);
         User user = userService.getLoggedUser(auth.getName());
         model.addAttribute("user", user);
-        model.addAttribute("nUnreadArticles", articleService.countUnreadArticles());
+        model.addAttribute("nUnreadArticles", articleService.countUnreadArticles(roles));
         return INDEX_PAGE;
     }
 }

@@ -40,17 +40,19 @@ public final class NajwiParser extends ParserBase {
     @Override
     List<Article> parseSearchResults(Topic topic) {
         List<Article> res = new ArrayList<>();
-        for (int page = 1; page <= 6; page++) {
-            try {
-                Document doc = Jsoup.connect(topic.getLink() + page).userAgent("Mozilla/5.0").get();
-                Elements elms = doc.select("td > h2 > a");
+        if (topic.isEnabled()) {
+            for (int page = 1; page <= 6; page++) {
+                try {
+                    Document doc = Jsoup.connect(topic.getLink() + page).userAgent("Mozilla/5.0").get();
+                    Elements elms = doc.select("td > h2 > a");
 
-                for (Element a : elms) {
-                    String linkHref = a.attr("href");
-                    res.add(newArticle(topic, a.text(), linkHref));
+                    for (Element a : elms) {
+                        String linkHref = a.attr("href");
+                        res.add(newArticle(topic, a.text(), linkHref));
+                    }
+                } catch (IOException e) {
+                    log.error("IOException while parsing link: " + topic.getLink() + page, e);
                 }
-            } catch (IOException e) {
-                log.error("IOException while parsing link: " + topic.getLink() + page, e);
             }
         }
         return res;

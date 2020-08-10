@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <body>
 <div class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top" role="navigation" th:fragment="top-menu">
     <div class="container">
@@ -45,7 +46,7 @@
         <!--            </ul>-->
         <!--        </div>-->
         <ul class="nav">
-            <li class="nav-item">
+            <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
                 <a class="nav-link active" th:href="@{/system}"><i class="fa fa-cog pr-2"></i>System</a>
             </li>
             <li class="nav-item dropdown">

@@ -21,7 +21,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class TopicController extends BaseController {
 
-    public static final String ACCOUNT_PAGE = "account";
+    public static final String SYSTEM_PAGE = "system";
 
     private TopicService topicService;
 
@@ -35,6 +35,6 @@ public class TopicController extends BaseController {
         } catch (BusinessException ex) {
             redirectAttributes.addFlashAttribute("error", ex.getMessage());
         }
-        return redirect("/" + ACCOUNT_PAGE);
+        return redirect("/" + SYSTEM_PAGE);
     }
 }

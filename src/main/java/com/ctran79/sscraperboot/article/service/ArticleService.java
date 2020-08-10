@@ -4,9 +4,10 @@ import com.ctran79.sscraperboot.article.model.Article;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ArticleService {
-    Integer countUnreadArticles();
+    Integer countUnreadArticles(Set<String> roles);
 
     Page<Article> getArticlesListInTopic(Integer topicId, Integer pageNum, Integer pageSize);
 

@@ -42,21 +42,23 @@ public final class GoogleParser extends ParserBase {
     List<Article> parseSearchResults(Topic topic) {
         List<Article> res = new ArrayList<>();
         try {
-            Document doc = Jsoup.connect(topic.getLink()).userAgent("Mozilla/5.0").get();
-            Elements elms = doc.select("a > h3");
+            if (topic.isEnabled()) {
+                Document doc = Jsoup.connect(topic.getLink()).userAgent("Mozilla/5.0").get();
+                Elements elms = doc.select("a > h3");
 
-            for (Element result : elms) {
-                Element title = result.getElementsByTag("h3").first().getElementsByTag("div").first();
-                String linkHref = result.parentNode().attr("href");
+                for (Element result : elms) {
+                    Element title = result.getElementsByTag("h3").first().getElementsByTag("div").first();
+                    String linkHref = result.parentNode().attr("href");
 
-                res.add(newArticle(topic, title.text(),
-                        linkHref.substring(7, linkHref.indexOf("&"))
-                                .replace("%3F", "?")
-                                .replace("%3D", "=")
-                                .replace("%26", "&")
-                                .replace("%25", "%")
-                                .replace("%2B", "+"))
-                );
+                    res.add(newArticle(topic, title.text(),
+                            linkHref.substring(7, linkHref.indexOf("&"))
+                                    .replace("%3F", "?")
+                                    .replace("%3D", "=")
+                                    .replace("%26", "&")
+                                    .replace("%25", "%")
+                                    .replace("%2B", "+"))
+                    );
+                }
             }
             return res;
         } catch (IOException e) {

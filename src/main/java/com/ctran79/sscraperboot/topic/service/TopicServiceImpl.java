@@ -44,6 +44,7 @@ public class TopicServiceImpl implements TopicService {
             topic.setName(dto.getName());
             topic.setLink(dto.getLink());
             topic.setParser(dto.getParser());
+            topic.setEnabled(dto.isEnabled());
             topic.setRoles(dto.getRoles());
             list2Save.add(topic);
         });

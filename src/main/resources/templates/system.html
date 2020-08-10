@@ -5,7 +5,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <script layout:fragment="page-scripts" th:inline="javascript">
+    <script th:inline="javascript">
         /*<![CDATA[*/
         let topicsList = /*[[${topicsList}]]*/ [];
         let parsersList = /*[[${parsersList}]]*/ [];
@@ -42,6 +42,15 @@
             },
             {
                 targets: 3,
+                title: "Enabled",
+                width: "60px",
+                render: function (data, type, row, meta) {
+                    let retVal = `<input name="topicsList[${meta.row}].enabled" data-rowid="${meta.row}" data-propname="enabled" type="checkbox" class="custom-checkbox" value="true" ${row.enabled ? "checked" : ""}/>`;
+                    return retVal;
+                }
+            },
+            {
+                targets: 4,
                 render: function (data, type, row, meta) {
                     return `<button data-rowid="${meta.row}" class="btn btn-danger">Delete</button>`;
                 }
@@ -50,10 +59,10 @@
 
         let newParserRecord = {name: '', link: '', parser: "GOOGLE"};
 
-        function updateTopic(elm) {
+        function updateTopic(elm, elmPropName = 'value') {
             let idx = parseInt(elm.dataset.rowid);
             let propName = elm.dataset.propname;
-            let value = elm.value;
+            let value = elm[elmPropName];
             topicsList[idx][propName] = value;
         }
 
@@ -69,7 +78,7 @@
                 updateTopic(e.target);
             });
 
-            topicsTable.column(2).on("change", function (e) {
+            topicsTable.column([2, 3]).on("change", function (e) {
                 updateTopic(e.target);
             });
 

@@ -19,7 +19,7 @@ import java.util.List;
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Integer> {
 
-    Integer countByDeletedIsFalseAndVisitedIsFalse();
+    Integer countByDeletedIsFalseAndVisitedIsFalseAndTopicsIn(List<Topic> topics);
 
     @Query(nativeQuery = true,
             value = "SELECT a.* FROM article a JOIN article_topic at ON a.id=at.article_id WHERE at.topic_id=?1 AND a.deleted=false",
