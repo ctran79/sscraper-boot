@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script layout:fragment="page-scripts" th:inline="javascript">
+        /*<![CDATA[*/
+        let topicsList = /*[[${topicsList}]]*/ [];
+        let parsersList = /*[[${parsersList}]]*/ [];
+        let deletedTopicIds = [];
+        let columnDefs = [
+            {
+                targets: 0,
+                title: "Name",
+                width: "120px",
+                render: function (data, type, row, meta) {
+                    return `<input name="topicsList[${meta.row}].name" data-rowid="${meta.row}" data-propname="name" class="form-control" type="text" value="${row.name}"/>`;
+                }
+            },
+            {
+                targets: 1,
+                title: "Link",
+                render: function (data, type, row, meta) {
+                    return `<input name="topicsList[${meta.row}].link" data-rowid="${meta.row}" data-propname="link" class="form-control" type="text" value="${row.link}"/>`;
+                }
+            },
+            {
+                targets: 2,
+                title: "Parser",
+                width: "120px",
+                render: function (data, type, row, meta) {
+                    let retVal = `<select name="topicsList[${meta.row}].parser" data-rowid="${meta.row}" data-propname="parser" class="custom-select">`;
+                    retVal = parsersList.reduce(
+                        (options, parserName) => options + `<option class="form-control" type="text" ${parserName === row.parser ? "selected" : ""} value="${parserName}">${parserName}</option>`
+                        , retVal
+                    );
+                    retVal += `</select>`;
+                    return retVal;
+                }
+            },
+            {
+                targets: 3,
+                render: function (data, type, row, meta) {
+                    return `<button data-rowid="${meta.row}" class="btn btn-danger">Delete</button>`;
+                }
+            }
+        ];
+
+        let newParserRecord = {name: '', link: '', parser: "GOOGLE"};
+
+        function updateTopic(elm) {
+            let idx = parseInt(elm.dataset.rowid);
+            let propName = elm.dataset.propname;
+            let value = elm.value;
+            topicsList[idx][propName] = value;
+        }
+
+        $(function () {
+            let topicsTable = $("#topics-table").DataTable({
+                data: topicsList,
+                ordering: false,
+                searching: false,
+                columnDefs: columnDefs
+            });
+
+            topicsTable.column([0, 1]).on("keyup", function (e) {
+                updateTopic(e.target);
+            });
+
+            topicsTable.column(2).on("change", function (e) {
+                updateTopic(e.target);
+            });
+
+            topicsTable.on("click", "button[data-rowid]", function (e) {
+                e.preventDefault();
+                let i = parseInt(this.dataset.rowid);
+                if (topicsList[i].id) {
+                    deletedTopicIds.push(topicsList[i].id);
+                }
+                topicsList.splice(i, 1);
+                topicsTable.clear();
+                topicsTable.rows.add(topicsList).draw();
+            });
+
+            $("#add-new-parser-btn").on("click", function (e) {
+                e.preventDefault();
+                topicsList.push(newParserRecord);
+                topicsTable.row.add(newParserRecord).draw();
+            });
+
+            $("#topics-list-form").on("submit", function () {
+                let form = $(this);
+                topicsList.forEach((item, i) => {
+                    if (item.id) {
+                        form.append(`<input name="topicsList[${i}].id" type="text" hidden value="${item.id ? item.id : 'null'}"/>`)
+                    }
+                });
+                deletedTopicIds.forEach((id) => form.append(`<input name="deletedTopicIds" type="text" hidden value="${id}"/>`));
+                return true;
+            });
+        })
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${not #strings.isEmpty(error)}">
+        <span th:text="${error}"></span>
+        <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${not #strings.isEmpty(success)}">
+        <span th:text="${success}"></span>
+        <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <form id="topics-list-form" sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{/topics}" th:method="post">
+        <h1>Links list</h1>
+        <table id="topics-table"></table>
+        <button class="btn btn-outline-primary" id="add-new-parser-btn">Add</button>
+        <button class="btn btn-primary" id="save-parsers-list-btn" type="submit">Save list</button>
+    </form>
+</div>
+</body>
+</html>

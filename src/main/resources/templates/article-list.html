@@ -3,45 +3,12 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
-<body>
-<div class="container pt-2" layout:fragment="content">
-    <div class="form-inline">
-        <div class="px-2">Please choose topic:</div>
-        <div class="px-2 form-group ">
-            <select class="form-control" id="select-topic">
-                <option th:each="item : ${topics}" th:selected="${#strings.equals(param.topic, item.id)}"
-                        th:text="${item.name}" th:value="${item.id}"></option>
-            </select>
-        </div>
-        <div class="px-2">
-            <button class="btn btn-primary" id="show-articles-list-btn">Show</button>
-        </div>
-    </div>
-    <table class="table table-striped" id="articles-table" th:if="${not #strings.isEmpty(param.topic)}">
-    </table>
-</div>
-<script layout:fragment="page-scripts" th:inline="javascript">
-    /*<![CDATA[*/
-    let parserCode = /*[[${parserCode}]]*/ '';
-    let url = /*[[${url}]]*/ '';
-
-    $("#show-articles-list-btn").on("click", function (e) {
-        e.preventDefault();
-        let topicId = parseInt($("select[id=select-topic]").val());
-        if (topicId) {
-            window.location = BASE_APP_URL + `/parsers/${parserCode}?topic=${topicId}`;
-        }
-    });
-
-    let articleTable = $("#articles-table").DataTable({
-        processing: true,
-        serverSide: true,
-        ordering: false,
-        searching: false,
-        pageLength: 20,
-        lengthChange: false,
-        ajax: BASE_APP_URL + `/api/parsers/${parserCode}?topic=` + [[${param.topic}]] + '&page=1',
-        columnDefs: [
+<head>
+    <script layout:fragment="page-scripts" th:inline="javascript">
+        /*<![CDATA[*/
+        let parserCode = /*[[${parserCode}]]*/ '';
+        let url = /*[[${url}]]*/ '';
+        let columnDefs = [
             {
                 targets: 0,
                 render: function (data, type, row) {
@@ -67,36 +34,67 @@
                     return `<a class="article-item" rel="noopener noreferrer" target="_blank" href="${row.link}" id="${row.id}"><span class="${row.visited == true ? 'font-weight-light' : 'font-weight-bold'}">${row.title}</span></a>`;
                 }
             }
-        ]
-    });
-    articleTable.on("click", "i[id].article-item", function () {
-        $.ajax({
-            type: "PATCH",
-            url: BASE_APP_URL + "/api/articles/" + this.id + "?favorite=" + (this.dataset.favorite),
-            success: function () {
-                articleTable.ajax.reload();
+        ];
+
+        $(function () {
+            $("#show-articles-list-btn").on("click", function (e) {
+                e.preventDefault();
+                let topicId = parseInt($("select[id=select-topic]").val());
+                if (topicId) {
+                    window.location = BASE_APP_URL + `/parsers/${parserCode}?topic=${topicId}`;
+                }
+            });
+
+            let articleTable = $("#articles-table").DataTable({
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                searching: false,
+                pageLength: 20,
+                lengthChange: false,
+                ajax: BASE_APP_URL + `/api/parsers/${parserCode}?topic=` + [[${param.topic}]] + '&page=1',
+                columnDefs: columnDefs
+            });
+
+            function patchArticle(url) {
+                $.ajax({
+                    type: "PATCH",
+                    url: url,
+                    success: function () {
+                        articleTable.ajax.reload();
+                    }
+                });
             }
+
+            articleTable.on("click", "i[id].article-item", function () {
+                patchArticle(BASE_APP_URL + "/api/articles/" + this.id + "?favorite=" + (this.dataset.favorite));
+            });
+            articleTable.on("click", "img[id].article-item", function () {
+                patchArticle(BASE_APP_URL + "/api/articles/" + this.id + "?deleted=true");
+            });
+            articleTable.on("click", "a[id].article-item", function () {
+                patchArticle(BASE_APP_URL + "/api/articles/" + this.id + "?visited=true")
+            });
         });
-    });
-    articleTable.on("click", "img[id].article-item", function () {
-        $.ajax({
-            type: "PATCH",
-            url: BASE_APP_URL + "/api/articles/" + this.id + "?deleted=true",
-            success: function () {
-                articleTable.ajax.reload();
-            }
-        });
-    });
-    articleTable.on("click", "a[id].article-item", function () {
-        $.ajax({
-            type: "PATCH",
-            url: BASE_APP_URL + "/api/articles/" + this.id + "?visited=true",
-            success: function () {
-                articleTable.ajax.reload();
-            }
-        });
-    });
-    /*]]>*/
-</script>
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div class="container pt-2" layout:fragment="content">
+    <div class="form-inline">
+        <div class="px-2">Please choose topic:</div>
+        <div class="px-2 form-group ">
+            <select class="form-control" id="select-topic">
+                <option th:each="item : ${topics}" th:selected="${#strings.equals(param.topic, item.id)}"
+                        th:text="${item.name}" th:value="${item.id}"></option>
+            </select>
+        </div>
+        <div class="px-2">
+            <button class="btn btn-primary" id="show-articles-list-btn">Show</button>
+        </div>
+    </div>
+    <table class="table table-striped" id="articles-table" th:if="${not #strings.isEmpty(param.topic)}">
+    </table>
+</div>
 </body>
 </html>

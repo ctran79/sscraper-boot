@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class UserController extends BaseController {
 
     public static final String LOGIN_PAGE = "login";
-    public static final String ACCOUNT_PAGE = "account";
+    public static final String SYSTEM_PAGE = "system";
 
     private TopicService topicService;
 
@@ -33,12 +33,12 @@ public class UserController extends BaseController {
         return LOGIN_PAGE;
     }
 
-    @GetMapping("/account")
-    String account(Authentication auth, Model model) {
+    @GetMapping("/system")
+    String system(Authentication auth, Model model) {
         Set<String> roles = getLoggedInUserRoles(auth);
         List<Topic> topics = topicService.getTopicsByRoles(roles);
         model.addAttribute("topicsList", topics);
         model.addAttribute("parsersList", Arrays.stream(Parser.values()).map(Parser::name).collect(Collectors.toList()));
-        return ACCOUNT_PAGE;
+        return SYSTEM_PAGE;
     }
 }
