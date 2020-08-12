@@ -44,7 +44,7 @@ public class RestArticleController {
                                                @RequestParam(name = "topic") Integer topicId,
                                                @RequestParam Integer start,
                                                @RequestParam Integer length,
-                                               Model model, Authentication auth) {
+                                               Authentication auth) {
         parserCode = parserCode.toUpperCase();
         Set<String> roles = auth.getAuthorities().stream()
                 .map(grantedAuthority -> grantedAuthority.getAuthority())

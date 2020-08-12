@@ -3,82 +3,6 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        let parserCode = /*[[${parserCode}]]*/ '';
-        let url = /*[[${url}]]*/ '';
-        let columnDefs = [
-            {
-                targets: 0,
-                render: function (data, type, row) {
-                    let retVal = `<div style="min-width: 60px">`;
-                    retVal += `<i id="${row.id}" data-favorite="${!row.favorite}" class="article-item ${row.favorite == true ? 'fa fa-star' : 'fa fa-star-o'}"></i>`;
-                    retVal += `<img class="article-item" id="${row.id}" alt="delete" class="float-right" style="margin-top: -5px" src="${BASE_APP_URL + '/img/delete.ico'}"/></div>`;
-                    retVal += `</div>`;
-                    return retVal;
-                }
-            },
-            {
-                targets: 1,
-                render: function (data, type, row) {
-                    let retVal = `<div style="min-width: 120px">`;
-                    retVal += moment(row.scrapingDate).format("YYYY-MM-DD");
-                    retVal += `</div>`;
-                    return retVal;
-                }
-            },
-            {
-                targets: 2,
-                render: function (data, type, row) {
-                    return `<a class="article-item" rel="noopener noreferrer" target="_blank" href="${row.link}" id="${row.id}"><span class="${row.visited == true ? 'font-weight-light' : 'font-weight-bold'}">${row.title}</span></a>`;
-                }
-            }
-        ];
-
-        $(function () {
-            $("#show-articles-list-btn").on("click", function (e) {
-                e.preventDefault();
-                let topicId = parseInt($("select[id=select-topic]").val());
-                if (topicId) {
-                    window.location = BASE_APP_URL + `/parsers/${parserCode}?topic=${topicId}`;
-                }
-            });
-
-            let articleTable = $("#articles-table").DataTable({
-                processing: true,
-                serverSide: true,
-                ordering: false,
-                searching: false,
-                pageLength: 20,
-                lengthChange: false,
-                ajax: BASE_APP_URL + `/api/parsers/${parserCode}?topic=` + [[${param.topic}]] + '&page=1',
-                columnDefs: columnDefs
-            });
-
-            function patchArticle(url) {
-                $.ajax({
-                    type: "PATCH",
-                    url: url,
-                    success: function () {
-                        articleTable.ajax.reload();
-                    }
-                });
-            }
-
-            articleTable.on("click", "i[id].article-item", function () {
-                patchArticle(BASE_APP_URL + "/api/articles/" + this.id + "?favorite=" + (this.dataset.favorite));
-            });
-            articleTable.on("click", "img[id].article-item", function () {
-                patchArticle(BASE_APP_URL + "/api/articles/" + this.id + "?deleted=true");
-            });
-            articleTable.on("click", "a[id].article-item", function () {
-                patchArticle(BASE_APP_URL + "/api/articles/" + this.id + "?visited=true")
-            });
-        });
-        /*]]>*/
-    </script>
-</head>
 <body>
 <div class="container pt-2" layout:fragment="content">
     <div class="form-inline">
@@ -96,5 +20,79 @@
     <table class="table table-striped" id="articles-table" th:if="${not #strings.isEmpty(param.topic)}">
     </table>
 </div>
+<script th:inline="javascript" layout:fragment="page-scripts">
+    /*<![CDATA[*/
+    let parserCode = /*[[${parserCode}]]*/ '';
+    let url = /*[[${url}]]*/ '';
+    let columnDefs = [
+        {
+            targets: 0,
+            render: function (data, type, row) {
+                let retVal = `<div style="min-width: 60px">`;
+                retVal += `<i id="${row.id}" data-favorite="${!row.favorite}" class="article-item ${row.favorite == true ? 'fa fa-star' : 'fa fa-star-o'}"></i>`;
+                retVal += `<img class="article-item" id="${row.id}" alt="delete" class="float-right" style="margin-top: -5px" src="${BASE_APP_URL + '/img/delete.ico'}"/></div>`;
+                retVal += `</div>`;
+                return retVal;
+            }
+        },
+        {
+            targets: 1,
+            render: function (data, type, row) {
+                let retVal = `<div style="min-width: 120px">`;
+                retVal += moment(row.scrapingDate).format("YYYY-MM-DD");
+                retVal += `</div>`;
+                return retVal;
+            }
+        },
+        {
+            targets: 2,
+            render: function (data, type, row) {
+                return `<a class="article-item" rel="noopener noreferrer" target="_blank" href="${row.link}" id="${row.id}"><span class="${row.visited == true ? 'font-weight-light' : 'font-weight-bold'}">${row.title}</span></a>`;
+            }
+        }
+    ];
+
+    $(function () {
+        $("#show-articles-list-btn").on("click", function (e) {
+            e.preventDefault();
+            let topicId = parseInt($("select[id=select-topic]").val());
+            if (topicId) {
+                window.location = BASE_APP_URL + `/parsers/${parserCode}?topic=${topicId}`;
+            }
+        });
+
+        let articleTable = $("#articles-table").DataTable({
+            processing: true,
+            serverSide: true,
+            ordering: false,
+            searching: false,
+            pageLength: 20,
+            lengthChange: false,
+            ajax: BASE_APP_URL + `/api/parsers/${parserCode}?topic=` + [[${param.topic}]] + '&page=1',
+            columnDefs: columnDefs
+        });
+
+        function patchArticle(url) {
+            $.ajax({
+                type: "PATCH",
+                url: url,
+                success: function () {
+                    articleTable.ajax.reload(null, false);
+                }
+            });
+        }
+
+        articleTable.on("click", "i[id].article-item", function () {
+            patchArticle(BASE_APP_URL + "/api/articles/" + this.id + "?favorite=" + (this.dataset.favorite));
+        });
+        articleTable.on("click", "img[id].article-item", function () {
+            patchArticle(BASE_APP_URL + "/api/articles/" + this.id + "?deleted=true");
+        });
+        articleTable.on("click", "a[id].article-item", function () {
+            patchArticle(BASE_APP_URL + "/api/articles/" + this.id + "?visited=true")
+        });
+    });
+    /*]]>*/
+</script>
 </body>
 </html>

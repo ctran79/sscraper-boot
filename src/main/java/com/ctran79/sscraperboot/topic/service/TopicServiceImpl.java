@@ -40,7 +40,7 @@ public class TopicServiceImpl implements TopicService {
     public void batchUpdateTopicsList(List<Topic> topicsList, Integer[] deletedTopicIds) throws BusinessException {
         List<Topic> list2Save = new ArrayList<>();
         topicsList.stream().forEach(dto -> {
-            Topic topic = dto.getId() == null ? new Topic() : topicRepository.getOne(dto.getId());
+            Topic topic = (dto.getId() == null ? new Topic() : topicRepository.getOne(dto.getId()));
             topic.setName(dto.getName());
             topic.setLink(dto.getLink());
             topic.setParser(dto.getParser());
