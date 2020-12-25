@@ -2,6 +2,7 @@ package com.ctran79.sscraperboot.task;
 
 import com.ctran79.sscraperboot.article.model.Article;
 import com.ctran79.sscraperboot.article.service.ArticleService;
+import com.ctran79.sscraperboot.blockedsite.service.BlockedSiteRepository;
 import com.ctran79.sscraperboot.topic.model.Topic;
 import com.ctran79.sscraperboot.topic.service.TopicService;
 import com.ctran79.sscraperboot.user.model.RoleType;
@@ -25,6 +26,7 @@ public abstract class ParserBase implements ParserService {
 
     private ArticleService articleService;
     private TopicService topicService;
+    private BlockedSiteRepository blockedSiteRepository;
 
     static void pause(int ms) {
         try {
@@ -93,7 +95,11 @@ public abstract class ParserBase implements ParserService {
         article.setTitle(title);
         article.setLink(link);
         Integer p = link.indexOf("://") + 3;
-        article.setSite(link.substring(0, link.indexOf("/", p)));
+        String site = link.substring(0, link.indexOf("/", p));
+        article.setSite(site);
+        if (blockedSiteRepository.findFirstBySite(site) != null) {
+            return null;
+        }
         return article;
     }
 

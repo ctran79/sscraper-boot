@@ -3,6 +3,7 @@ package com.ctran79.sscraperboot.task;
 
 import com.ctran79.sscraperboot.article.model.Article;
 import com.ctran79.sscraperboot.article.service.ArticleService;
+import com.ctran79.sscraperboot.blockedsite.service.BlockedSiteRepository;
 import com.ctran79.sscraperboot.topic.model.Topic;
 import com.ctran79.sscraperboot.topic.service.TopicService;
 import lombok.Getter;
@@ -28,8 +29,8 @@ public final class GoogleParser extends ParserBase {
     private boolean enable;
 
     @Autowired
-    public GoogleParser(ArticleService articleService, TopicService topicService) {
-        super(articleService, topicService);
+    public GoogleParser(ArticleService articleService, TopicService topicService, BlockedSiteRepository blockedSiteRepository) {
+        super(articleService, topicService, blockedSiteRepository);
     }
 
     @Override
@@ -50,14 +51,16 @@ public final class GoogleParser extends ParserBase {
                     Element title = result.getElementsByTag("h3").first().getElementsByTag("div").first();
                     String linkHref = result.parentNode().attr("href");
 
-                    res.add(newArticle(topic, title.text(),
+                    Article article = newArticle(topic, title.text(),
                             linkHref.substring(7, linkHref.indexOf("&"))
                                     .replace("%3F", "?")
                                     .replace("%3D", "=")
                                     .replace("%26", "&")
                                     .replace("%25", "%")
-                                    .replace("%2B", "+"))
-                    );
+                                    .replace("%2B", "+"));
+                    if (article != null) {
+                        res.add(article);
+                    }
                 }
             }
             return res;

@@ -2,6 +2,7 @@ package com.ctran79.sscraperboot.task;
 
 import com.ctran79.sscraperboot.article.model.Article;
 import com.ctran79.sscraperboot.article.service.ArticleService;
+import com.ctran79.sscraperboot.blockedsite.service.BlockedSiteRepository;
 import com.ctran79.sscraperboot.topic.model.Topic;
 import com.ctran79.sscraperboot.topic.service.TopicService;
 import lombok.Getter;
@@ -27,8 +28,8 @@ public final class NajwiParser extends ParserBase {
     private boolean enable;
 
     @Autowired
-    public NajwiParser(ArticleService articleService, TopicService topicService) {
-        super(articleService, topicService);
+    public NajwiParser(ArticleService articleService, TopicService topicService, BlockedSiteRepository blockedSiteRepository) {
+        super(articleService, topicService, blockedSiteRepository);
     }
 
     @Override
@@ -48,7 +49,10 @@ public final class NajwiParser extends ParserBase {
 
                     for (Element a : elms) {
                         String linkHref = a.attr("href");
-                        res.add(newArticle(topic, a.text(), linkHref));
+                        Article article = newArticle(topic, a.text(), linkHref);
+                        if (article != null) {
+                            res.add(article);
+                        }
                     }
                 } catch (IOException e) {
                     log.error("IOException while parsing link: " + topic.getLink() + page, e);
