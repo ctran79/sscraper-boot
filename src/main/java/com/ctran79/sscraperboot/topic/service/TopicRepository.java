@@ -18,8 +18,8 @@ import java.util.Set;
 public interface TopicRepository extends JpaRepository<Topic, Integer> {
 
     @Query(nativeQuery = true,
-            value = "SELECT t.* FROM topic t JOIN topic_role tr ON t.id=tr.topic_id WHERE t.parser=:parser AND tr.role IN :roles")
-    List<Topic> getTopicsByParser(@Param("parser") String parserCode, Set<String> roles);
+            value = "SELECT t.* FROM topic t JOIN topic_role tr ON t.id=tr.topic_id WHERE t.enabled=TRUE AND t.parser=:parser AND tr.role IN :roles")
+    List<Topic> getEnabledTopicsByParser(@Param("parser") String parserCode, Set<String> roles);
 
     List<Topic> findTopicsByRolesInOrderByIdAsc(Set<String> roles);
 

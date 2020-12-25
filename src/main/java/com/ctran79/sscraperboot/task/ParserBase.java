@@ -92,6 +92,8 @@ public abstract class ParserBase implements ParserService {
         article.getTopics().add(topic);
         article.setTitle(title);
         article.setLink(link);
+        Integer p = link.indexOf("://") + 3;
+        article.setSite(link.substring(0, link.indexOf("/", p)));
         return article;
     }
 

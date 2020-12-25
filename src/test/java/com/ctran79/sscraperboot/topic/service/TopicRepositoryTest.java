@@ -22,7 +22,7 @@ class TopicRepositoryTest {
     void getTopicsByParser() {
         Set<String> roles = new HashSet<>();
         roles.add("ROLE_ADMIN");
-        List<Topic> topics = repository.getTopicsByParser("GOOGLE", roles);
+        List<Topic> topics = repository.getEnabledTopicsByParser("GOOGLE", roles);
         Assert.notEmpty(topics, "Topics not found");
     }
 }

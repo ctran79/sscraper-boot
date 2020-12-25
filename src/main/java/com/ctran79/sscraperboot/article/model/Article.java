@@ -3,6 +3,8 @@ package com.ctran79.sscraperboot.article.model;
 import com.ctran79.sscraperboot.base.IdEntity;
 import com.ctran79.sscraperboot.topic.model.Topic;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -17,6 +19,9 @@ import java.util.Set;
 @Entity
 @Data
 public class Article extends IdEntity {
+
+    @Column
+    private String site;
 
     @Column
     private String link;

@@ -27,7 +27,7 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public List<Topic> getTopicsByParserAndRoles(String parserCode, Set<String> roles) {
-        return topicRepository.getTopicsByParser(parserCode, roles);
+        return topicRepository.getEnabledTopicsByParser(parserCode, roles);
     }
 
     @Override
